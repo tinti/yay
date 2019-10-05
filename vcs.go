@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"sync"
@@ -225,15 +226,10 @@ func saveVCSInfo() error {
 	if err != nil || string(marshalledinfo) == "null" {
 		return err
 	}
-	in, err := os.OpenFile(vcsFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return err
-	}
-	defer in.Close()
-	_, err = in.Write(marshalledinfo)
-	if err != nil {
-		return err
-	}
-	err = in.Sync()
+
+	fmt.Printf("Structure:\n%#v\nTo Write:\n%s\n", savedInfo, string(marshalledinfo))
+
+	_ = ioutil.WriteFile(vcsFile, marshalledinfo, 0644)
+
 	return err
 }
