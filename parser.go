@@ -449,6 +449,10 @@ func isArg(arg string) bool {
 	case "news":
 	case "gendb":
 	case "currentconfig":
+	case "lowpriority":
+	case "nolowpriority":
+	case "renice":
+	case "ionice":
 	default:
 		return false
 	}
@@ -606,6 +610,14 @@ func handleConfig(option, value string) bool {
 		config.RemoveMake = "no"
 	case "askremovemake":
 		config.RemoveMake = "ask"
+	case "lowpriority":
+		config.LowPriority = true
+	case "nolowpriority":
+		config.LowPriority = false
+	case "renicebin":
+		config.ReniceBin = value
+	case "ionicebin":
+		config.IoniceBin = value
 	default:
 		return false
 	}

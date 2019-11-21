@@ -79,6 +79,9 @@ type Configuration struct {
 	EditMenu           bool   `json:"editmenu"`
 	CombinedUpgrade    bool   `json:"combinedupgrade"`
 	UseAsk             bool   `json:"useask"`
+	LowPriority        bool   `json:"lowpriority"`
+	ReniceBin          string `json:"renicebin"`
+	IoniceBin          string `json:"ionicebin"`
 }
 
 var version = "9.4.2"
@@ -184,6 +187,9 @@ func defaultSettings() *Configuration {
 		EditMenu:           false,
 		UseAsk:             false,
 		CombinedUpgrade:    false,
+		LowPriority:        false,
+		ReniceBin:          "renice",
+		IoniceBin:          "ionice",
 	}
 
 	if os.Getenv("XDG_CACHE_HOME") != "" {
@@ -219,6 +225,8 @@ func (config *Configuration) expandEnv() {
 	config.AnswerEdit = os.ExpandEnv(config.AnswerEdit)
 	config.AnswerUpgrade = os.ExpandEnv(config.AnswerUpgrade)
 	config.RemoveMake = os.ExpandEnv(config.RemoveMake)
+	config.ReniceBin = os.ExpandEnv(config.ReniceBin)
+	config.IoniceBin = os.ExpandEnv(config.IoniceBin)
 }
 
 // Editor returns the preferred system editor.

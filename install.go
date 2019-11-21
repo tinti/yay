@@ -61,6 +61,20 @@ func install(parser *arguments) (err error) {
 
 	warnings := makeWarnings()
 
+	if config.LowPriority {
+		cmd := exec.Command(config.ReniceBin, "-n", "19", fmt.Sprintf("%d", os.Getpid()))
+		err := cmd.Run()
+		if err != nil {
+			return fmt.Errorf("Error unable to set CPU priority")
+		}
+
+		cmd = exec.Command(config.IoniceBin, "-c", "3", "-p", fmt.Sprintf("%d", os.Getpid()))
+		err = cmd.Run()
+		if err != nil {
+			return fmt.Errorf("Error unable to set IO priority")
+		}
+	}
+
 	if mode == modeAny || mode == modeRepo {
 		if config.CombinedUpgrade {
 			if parser.existsArg("y", "refresh") {
