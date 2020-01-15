@@ -82,7 +82,7 @@ type Configuration struct {
 	LowPriority        bool   `json:"lowpriority"`
 }
 
-var version = "9.4.2"
+var version = "9.4.3"
 
 // configFileName holds the name of the config file.
 const configFileName string = "config.json"
@@ -127,18 +127,19 @@ var hideMenus = false
 
 // SaveConfig writes yay config to file.
 func (config *Configuration) saveConfig() error {
-	marshalledinfo, _ := json.MarshalIndent(config, "", "\t")
+	marshalledinfo, err := json.MarshalIndent(config, "", "\t")
+	if err != nil {
+		return err
+	}
 	in, err := os.OpenFile(configFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
 	defer in.Close()
-	_, err = in.Write(marshalledinfo)
-	if err != nil {
+	if _, err = in.Write(marshalledinfo); err != nil {
 		return err
 	}
-	err = in.Sync()
-	return err
+	return in.Sync()
 }
 
 func defaultSettings() *Configuration {
